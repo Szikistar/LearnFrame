@@ -5,14 +5,20 @@ namespace LF.Data.Repository
 {
     public class CourseRepository
     {
+        private readonly LFDbContext db;
+        public CourseRepository()
+        {
+            var factory = new LFDbContextFactory();
+            db = factory.CreateDbContext( new string[] {} );
+        }
         public void Add(Course entity)
         {
-            throw new NotImplementedException();
+            db.Courses.Add(entity);
         }
 
         public Course GetById(int Id) 
         {
-            throw new NotImplementedException();
+            return db.Courses.Find(Id);
         }
     }
 }
