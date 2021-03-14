@@ -9,6 +9,7 @@ namespace LF.Data.Models
         {
             var builder = new DbContextOptionsBuilder<LFDbContext>();
 
+            // TODO: Settings from appsettings
             builder.UseSqlite("Data Source=LF.db;");
 
             return new LFDbContext(builder.Options);
