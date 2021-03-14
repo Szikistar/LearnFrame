@@ -1,5 +1,8 @@
+using System;
+using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 
 namespace LF.Data.Models
 {
@@ -7,12 +10,23 @@ namespace LF.Data.Models
     {
         public LFDbContext CreateDbContext(string[] args)
         {
-            var builder = new DbContextOptionsBuilder<LFDbContext>();
+            var obuilder = new DbContextOptionsBuilder<LFDbContext>();
 
-            // TODO: Settings from appsettings
-            builder.UseSqlite("Data Source=LF.db;");
+            var basePath = Directory.GetCurrentDirectory();
+            var environment = Environment.GetEnvironmentVariable(GlobalStrings.AspnetCoreEnvironment);
 
-            return new LFDbContext(builder.Options);
+            var cbuilder = new ConfigurationBuilder()
+                        .SetBasePath(basePath)
+                        .AddJsonFile("appsettings.json")
+                        .AddJsonFile($"appsettings.{environment}.json", true)
+                        .AddEnvironmentVariables();
+            var config = cbuilder.Build();
+            
+            var cn = config.GetConnectionString(GlobalStrings.ConnectionName);
+            
+            obuilder.UseSqlite(cn);
+
+            return new LFDbContext(obuilder.Options);
         }
     }
 }

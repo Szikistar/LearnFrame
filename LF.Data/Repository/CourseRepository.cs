@@ -12,16 +12,28 @@ namespace LF.Data.Repository
             var factory = new LFDbContextFactory();
             db = factory.CreateDbContext( new string[] {} );
         }
-        public void Add(Course entity)
+        public void Add(Course course)
         {
             // TODO: Async
-            db.Courses.Add(entity);
+            db.Courses.Add(course);
         }
 
         public Course GetById(int Id) 
         {
             // TODO: Async
             return db.Courses.Find(Id);
+        }
+
+        public void Update(Course course)
+        {
+            // TODO: return with void?
+            db.Courses.Update(course);
+        }
+
+        public void Remove(Course course)
+        {
+            // TODO: return with void?
+            db.Courses.Remove(course);
         }
     }
 }
