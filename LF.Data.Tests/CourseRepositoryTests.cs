@@ -9,21 +9,21 @@ namespace LF.Data.Tests
     /// <summary>
     /// CRUD and list tests
     /// </summary>
-    public class CourseRepositoryTests
+    public class CourseRepositoryTests : IClassFixture<DatabaseFixture>
     {
-        public CourseRepositoryTests()
-        {
-            var factory = new LFDbContextFactory();
-            var db = factory.CreateDbContext( new string [] {} );
+        private readonly DatabaseFixture fixture;
 
-            db.Database.EnsureCreated();
+        public CourseRepositoryTests(DatabaseFixture fixture)
+        {
+            this.fixture = fixture 
+                ?? throw new ArgumentNullException(nameof(fixture));
         }
         [Fact]
         public void CourseRepositoryTests_AddedCoursesShouldBeAppearInRepository()
         {
             // Arrange
             // SUT: System Under Test
-            var sut = new CourseRepository();
+            var sut = new CourseRepository(fixture.GetNewLFDbContext());
             var course = new Course 
             {
                 Id = 1,
@@ -46,7 +46,7 @@ namespace LF.Data.Tests
         public void CourseRepositoryTests_ExistingCoursesShouldBeAppearInRepository()
         {
             // Arrange
-            var sut = new CourseRepository();
+            var sut = new CourseRepository(fixture.GetNewLFDbContext());
             var course = new Course { Id = 1, Name = "Test Course" };
             sut.Add(course);
 
@@ -65,7 +65,7 @@ namespace LF.Data.Tests
         public void CourseRepositoryTests_ExistingCoursesShouldBeChange()
         {
             // Arrange
-            var sut = new CourseRepository();
+            var sut = new CourseRepository(fixture.GetNewLFDbContext());
             var course = new Course { Id = 1, Name = "Test Course" };
             sut.Add(course);
             var toUpdate = sut.GetById(course.Id);
@@ -88,7 +88,7 @@ namespace LF.Data.Tests
         public void CourseRepositoryTests_ExistingCoursesShouldBeDelete()
         {
             // Arrange
-            var sut = new CourseRepository();
+            var sut = new CourseRepository(fixture.GetNewLFDbContext());
             var course = new Course { Id = 1, Name = "Test Course" };
             sut.Add(course);
             

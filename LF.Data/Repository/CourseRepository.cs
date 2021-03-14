@@ -6,12 +6,20 @@ namespace LF.Data.Repository
     public class CourseRepository
     {
         private readonly LFDbContext db;
+        
         public CourseRepository()
         {
             // TODO: Antipattern - konstruktorban összekötöm a két objektumot
             var factory = new LFDbContextFactory();
             db = factory.CreateDbContext( new string[] {} );
         }
+
+        public CourseRepository(LFDbContext db)
+        {
+            this.db = db
+                ?? throw new ArgumentNullException(nameof(db));
+        }
+
         public void Add(Course course)
         {
             // TODO: Async
