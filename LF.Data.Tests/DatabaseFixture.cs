@@ -1,5 +1,6 @@
 using System;
 using LF.Data.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace LF.Data.Tests
 {
@@ -12,7 +13,18 @@ namespace LF.Data.Tests
             // TODO: Antipattern
             factory = new LFDbContextFactory();
             var db = GetNewLFDbContext();
-            db.Database.EnsureCreated();
+
+            if(factory.IsInMemoryDb())
+            {
+                // Mamóriában lévő db esetén
+                db.Database.EnsureCreated();
+            }
+            else
+            {
+                // Csak fájl alapú futtatásnál, memória db-re nem fut le.
+                db.Database.Migrate();
+            }
+            
         }
 
         public LFDbContext GetNewLFDbContext()
@@ -23,6 +35,7 @@ namespace LF.Data.Tests
         public void Dispose()
         {
             var db = GetNewLFDbContext();
+            factory.Dispose();
             db.Database.EnsureDeleted();
             db.Dispose();
         }

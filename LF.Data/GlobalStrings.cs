@@ -4,5 +4,8 @@ namespace LF.Data
     {
         public static string ConnectionName {get;} = "DefaultConnection";
         public static string AspnetCoreEnvironment {get;} = "ASPNETCORE_ENVIRONMENT";
+        public static string DataSource {get;} = "Data Source";
+        public static string SqlMemoryDb {get;} = ":memory:";
+        
     }
 }
